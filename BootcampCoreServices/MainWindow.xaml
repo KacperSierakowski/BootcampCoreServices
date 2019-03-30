@@ -7,12 +7,24 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" Background="Black">
     <Grid>
-        <Image HorizontalAlignment="Left" Source="Images/UI_upload.png" Drop="Window_Drop" AllowDrop="true" Height="133" Margin="335,281,0,0" VerticalAlignment="Top" Width="135"/>
-        <TextBlock x:Name="XmlTextBlock" HorizontalAlignment="Left" Margin="230,10,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Height="48" Width="75" Foreground="Red"/>
-        <ListBox x:Name="OutputRaport" HorizontalAlignment="Left" Height="48" Margin="463,10,0,0" VerticalAlignment="Top" Width="319"/>
-        <TextBlock HorizontalAlignment="Left" Margin="315,256,0,0" TextWrapping="Wrap" Text="Drag and Drop file here:" VerticalAlignment="Top" Foreground="Red" FontWeight="Bold"/>
-        <Button x:Name="GenerateARaportButton" Content="Generate raport" HorizontalAlignment="Left" Margin="335,24,0,0" VerticalAlignment="Top" Width="105" Click="GenerateRaport" Height="40" Background="Red" FontWeight="Bold"/>
-        <TextBlock HorizontalAlignment="Left" Margin="22,7,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Foreground="Red" FontWeight="Bold"/>
+
+        <!-- Raport section -->
+        <DataGrid x:Name="DataGrid1" Visibility="Hidden"   Margin="475,10,10,10" Background="Red" BorderBrush="Red" >
+        </DataGrid>
+        <TextBlock x:Name="RaportTextBlock" Visibility="Hidden" HorizontalAlignment="Left" Margin="492,24,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="370" Width="273" Foreground="Red"/>
+
+        <!-- Drag and Drop section-->
+        <TextBlock HorizontalAlignment="Left" Margin="315,240,0,0" TextWrapping="Wrap" Text="Drag and Drop file here:" VerticalAlignment="Top" Foreground="Red" FontWeight="Bold"/>
+        <Image HorizontalAlignment="Left" Source="Images/UI_upload.png" Drop="Window_Drop" AllowDrop="true" Height="152" Margin="315,262,0,0" VerticalAlignment="Top" Width="155"/>
+
+
+        <!-- Type of file section-->
+        <TextBlock x:Name="HeaderTypeOfFileTextBlock" Visibility="Hidden" HorizontalAlignment="Left" Margin="10,11,0,0" TextWrapping="Wrap" Text="Wczytano plik z rozszerzeniem: " VerticalAlignment="Top" Foreground="Red" FontWeight="Bold"/>
+        <TextBlock x:Name="TypeOfFileTextBlock" HorizontalAlignment="Left" Margin="206,11,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Foreground="Red" FontWeight="Bold"/>
+        <TextBlock x:Name="XmlTextBlock" HorizontalAlignment="Left" Margin="268,10,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Height="48" Width="75" Foreground="Red"/>
+
+
+        <!-- Raport menu section-->
         <ComboBox x:Name="SortByCommonBox" HorizontalAlignment="Left" Margin="87,42,0,0" VerticalAlignment="Top" Width="120">
             <ComboBoxItem>ClientId</ComboBoxItem>
             <ComboBoxItem IsSelected="True">RequestId</ComboBoxItem>
@@ -20,20 +32,30 @@
             <ComboBoxItem>Quantity</ComboBoxItem>
             <ComboBoxItem>Price</ComboBoxItem>
         </ComboBox>
-        <TextBlock HorizontalAlignment="Left" Margin="10,45,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="16" Width="64" FontWeight="Bold" Foreground="Red" Text="Sortuj po:"/>
-        <TextBlock x:Name="TypeOfFileTextBlock" HorizontalAlignment="Left" Margin="140,7,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Foreground="Red" FontWeight="Bold"/>
-        <TextBlock x:Name="RaportTextBlock" HorizontalAlignment="Left" Margin="485,71,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="323" Width="280" Foreground="Red"/>
-        <Button Content="Ilość zamówień" HorizontalAlignment="Left" Margin="10,71,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="Button_Click"/>
-        <Button Content="Ilość zamówień dla klienta o wskazanym identyfikatorze " HorizontalAlignment="Left" Margin="10,99,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="Button_Click_1"/>
-        <Button Content="Łączna kwota zamówień " HorizontalAlignment="Left" Margin="10,125,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="Button_Click_2"/>
-        <Button Content="Łączna kwota zamówień dla klienta o wskazanym &#xD;&#xA;identyfikatorze  " HorizontalAlignment="Left" Margin="10,150,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="Button_Click_3"/>
-        <Button Content="Lista wszystkich zamówień  " HorizontalAlignment="Left" Margin="10,189,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="Button_Click_4"/>
-        <Button Content="Lista zamówień dla klienta o wskazanym identyfikatorze " HorizontalAlignment="Left" Margin="10,214,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="Button_Click_5"/>
-        <Button Content="Średnia wartość zamówienia" HorizontalAlignment="Left" Margin="10,315,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="Button_Click_8"/>
-        <Button Content="Średnia wartość zamówienia dla klienta o wskazanym&#xD;&#xA; identyfikatorze  " HorizontalAlignment="Left" Margin="10,240,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="Button_Click_6" Height="45"/>
-        <Button Content="Ilość zamówień pogrupowanych po nazwie  " HorizontalAlignment="Left" Margin="10,290,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="Button_Click_7"/>
-        <Button Content="Ilość zamówień pogrupowanych &#xD;&#xA;po nazwie dla klienta o wskazanym identyfikatorze " HorizontalAlignment="Left" Margin="10,340,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="Button_Click_9" Height="44"/>
-        <Button Content="Zamówienia w podanym przedziale cenowym" HorizontalAlignment="Left" Margin="10,389,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="Button_Click_10"/>
+        <TextBlock  x:Name="SortByHeaderTextBlock" HorizontalAlignment="Left" Margin="10,45,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="16" Width="64" FontWeight="Bold" Foreground="Red" Text="Sortuj po:"/>
+        <Button x:Name="AmountOfOrders_Button" Content="Ilość zamówień" HorizontalAlignment="Left" Margin="10,71,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="AmountOfOrders_Button_Click"/>
+        <Button x:Name="AmountOfOrdersByClientId_Button" Content="Ilość zamówień dla klienta o wskazanym identyfikatorze " HorizontalAlignment="Left" Margin="10,99,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="AmountOfOrdersByClientId_Button_Click"/>
+        <Button x:Name="TotalPriceOfOrders_Button" Content="Łączna kwota zamówień " HorizontalAlignment="Left" Margin="10,125,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="TotalPriceOfOrders_Button_Click"/>
+        <Button x:Name="TotalPriceOfOrdersByClientId_Button" Content="Łączna kwota zamówień dla klienta o wskazanym &#xD;&#xA;identyfikatorze  " HorizontalAlignment="Left" Margin="10,150,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="TotalPriceOfOrdersByClientId_Button_Click"/>
+        <Button x:Name="ListOfAllOrders_Button" Content="Lista wszystkich zamówień  " HorizontalAlignment="Left" Margin="10,189,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="ListOfAllOrders_Button_Click"/>
+        <Button x:Name="ListOfOrdersByClientId_Button" Content="Lista zamówień dla klienta o wskazanym identyfikatorze " HorizontalAlignment="Left" Margin="10,214,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="ListOfOrdersByClientId_Button_Click"/>
+        <Button x:Name="AveragePricesOfOrders_Button" Content="Średnia wartość zamówienia" HorizontalAlignment="Left" Margin="10,315,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="AveragePricesOfOrders_Button_Click"/>
+        <Button x:Name="AveragePriceOfOrdersByClientIdButton" Content="Średnia wartość zamówienia dla klienta o wskazanym&#xD;&#xA; identyfikatorze  " HorizontalAlignment="Left" Margin="10,240,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="AveragePriceOfOrdersByClientIdButton_Click" Height="45"/>
+        <Button x:Name="OrdersGroupByNames_Button" Content="Ilość zamówień pogrupowanych po nazwie  " HorizontalAlignment="Left" Margin="10,290,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="OrdersGroupByNames_Button_Click"/>
+        <Button x:Name="OrdersByClientIdGroupByNames_Button" Content="Ilość zamówień pogrupowanych &#xD;&#xA;po nazwie dla klienta o wskazanym identyfikatorze " HorizontalAlignment="Left" Margin="10,340,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="OrdersByClientIdGroupByNames_Button_Click" Height="44"/>
+        <Button x:Name="OrdersBetweenTwoPrices_Button" Content="Zamówienia w podanym przedziale cenowym" HorizontalAlignment="Left" Margin="10,389,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="OrdersBetweenTwoPrices_Button_Click"/>
+
+
+        <!-- Chosen clientId section-->
+        <TextBlock Name="HeaderChosenClientTextBlock" HorizontalAlignment="Left" Margin="335,125,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="16" Width="97" FontWeight="Bold" Foreground="Red" Visibility="Hidden" Text="Wybrany klient:"/>
+        <TextBlock Name="ChosenClientTextBlock" HorizontalAlignment="Left" Margin="335,146,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="16" Width="97" FontWeight="Bold" Foreground="Red" Visibility="Hidden"  Text=""/>
+
+        <!-- Chosen price range section-->
+        <TextBlock Name="HeaderPriceRangeTextBlock" HorizontalAlignment="Left" Margin="335,23,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="30" Width="116" FontWeight="Bold" Foreground="Red" Visibility="Hidden" Text="Wybrany przedział cenowy"/>
+        <TextBlock Name="HeaderUpperLimitTextBlock" HorizontalAlignment="Left" Margin="335,58,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="16" Width="116" FontWeight="Bold" Foreground="Red" Visibility="Hidden" Text="Ograniczenie górne:"/>
+        <TextBlock Name="HeaderLowerLimitTextBlock" HorizontalAlignment="Left" Margin="335,99,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="16" Width="116" FontWeight="Bold" Foreground="Red" Visibility="Hidden" Text="Ograniczenie dolne:"/>
+        <TextBlock Name="ChosenUpperLimitTextBlock" HorizontalAlignment="Left" Margin="335,79,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="16" Width="97" FontWeight="Bold" Foreground="Red" Visibility="Hidden" Text=""/>
+        <TextBlock Name="ChosenLowerLimitTextBlock" HorizontalAlignment="Left" Margin="335,125,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="16" Width="97" FontWeight="Bold" Foreground="Red" Visibility="Hidden" Text=""/>
 
     </Grid>
 </Window>

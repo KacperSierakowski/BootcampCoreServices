@@ -1,0 +1,17 @@
+﻿<Window x:Class="BootcampCoreServices.ChoosePricesWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BootcampCoreServices"
+        mc:Ignorable="d"
+        Title="Wybierz przedział cenowy" Height="250" Width="200"
+        Background="Black">
+    <Grid>
+        <TextBlock HorizontalAlignment="Left" Margin="24,38,0,0" TextWrapping="Wrap" Text="Górne ograniczenie:" VerticalAlignment="Top" Foreground="Red" FontWeight="Bold"/>
+        <TextBlock HorizontalAlignment="Left" Margin="24,90,0,0" TextWrapping="Wrap" Text="Dolne ograniczenie:" VerticalAlignment="Top" Foreground="Red" FontWeight="Bold"/>
+        <Button Content="Akceptuj" HorizontalAlignment="Left" Margin="24,147,0,0" VerticalAlignment="Top" Width="120" Background="Red" Height="45" Click="Button_Click"/>
+        <TextBox  x:Name="LowerLimitTextBox" TextChanged="LowerLimitTextBox_TextChanged" HorizontalAlignment="Left" Height="23" Margin="24,111,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="UpperLimitTextBox" TextChanged="UpperLimitTextBox_TextChanged" HorizontalAlignment="Left" Height="23" Margin="24,62,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
+    </Grid>
+</Window>

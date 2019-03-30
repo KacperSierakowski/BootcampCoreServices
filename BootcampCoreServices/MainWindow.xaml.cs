@@ -36,7 +36,6 @@ namespace BootcampCoreServices
         {
             InitializeComponent();
             db.Database.Initialize(true);
-
         }
         private void Window_Drop(object sender, DragEventArgs e)
         {
@@ -49,6 +48,8 @@ namespace BootcampCoreServices
                     string whatExtension;
                     if (CheckExtension(filePath, out whatExtension))
                     {
+                        ShowRaportButtons();
+                        HeaderTypeOfFileTextBlock.Visibility = Visibility.Visible;
                         if (whatExtension == ".csv")
                         {
                             TypeOfFileTextBlock.Text = whatExtension;
@@ -64,10 +65,11 @@ namespace BootcampCoreServices
                             TypeOfFileTextBlock.Text = whatExtension;
                             LoadXML(filePath);
                         }
+                        ShowRaportButtons();
                     }
                     else
                     {
-                        MessageBox.Show("You are choose wrong file!");
+                        MessageBox.Show("Wybrano zły format pliku!");
                     }
                 }
                 e.Handled = true;
@@ -76,82 +78,6 @@ namespace BootcampCoreServices
             {
                 MessageBox.Show(ex.Message);
             }
-        }
-
-        public void GenerateRaport(object sender, System.EventArgs e)
-        {
-            int Upper = 100;
-            int Lower = 10;
-            string clientId = "1";
-
-            //a.Ilość zamówień
-            var AmountOfOrders =
-            db.Orders
-                .Count();
-            RaportTextBlock.Text = RaportTextBlock.Text + "Ilość zamówień: " + AmountOfOrders.ToString() + Environment.NewLine;
-            //b.Ilość zamówień dla klienta o wskazanym identyfikatorze 
-            var AmountOfOrdersByClientId =
-            db.Orders
-                .Where(s => s.ClientId.Equals(clientId))
-                .Count();
-            RaportTextBlock.Text = RaportTextBlock.Text + "Ilość zamówień dla klienta o wskazanym identyfikatorze: " + AmountOfOrdersByClientId.ToString() + Environment.NewLine;
-            //c.Łączna kwota zamówień 
-            var totalPriceOfOrders =
-            db.Orders
-                .Select(s => s.Price)
-                .Sum();
-            RaportTextBlock.Text = RaportTextBlock.Text + "Łączna kwota zamówień: " + totalPriceOfOrders.ToString() + Environment.NewLine;
-            //d.Łączna kwota zamówień dla klienta o wskazanym identyfikatorze 
-            var totalPriceOfOrdersByClientId =
-            db.Orders
-                .Where(d => d.ClientId.Equals(clientId))
-                .Select(s => s.Price)
-                .Sum();
-            RaportTextBlock.Text = RaportTextBlock.Text + "Łączna kwota zamówień dla klienta o wskazanym identyfikatorze: " + totalPriceOfOrdersByClientId.ToString() + Environment.NewLine;
-
-
-            //e.Lista wszystkich zamówień 
-            var listOfAllOrders = db.Orders.ToList();
-            // RaportTextBlock.Text = listOfAllOrders.ToString();
-            //f.Lista zamówień dla klienta o wskazanym identyfikatorze 
-            var listOfOrdersByClientId =
-            db.Orders
-                .Where(s => s.ClientId.Equals(clientId))
-                .ToList();
-
-
-
-            //g.Średnia wartość zamówienia
-            var AveragePricesOfOrders =
-            db.Orders
-               .Average(f => f.Price);
-            RaportTextBlock.Text = RaportTextBlock.Text + "Średnia wartość zamówienia: " + AveragePricesOfOrders.ToString() + Environment.NewLine;
-            //h.Średnia wartość zamówienia dla klienta o wskazanym identyfikatorze 
-            var averagePriceOfOrdersByClientId =
-            db.Orders
-               .Where(r => r.ClientId == clientId)
-               .Average(f => f.Price);
-            RaportTextBlock.Text = RaportTextBlock.Text + "Średnia wartość zamówienia dla klienta o wskazanym identyfikatorze : " + averagePriceOfOrdersByClientId.ToString() + Environment.NewLine;
-
-
-            //i.Ilość zamówień pogrupowanych po nazwie 
-            var ordersGroupByNames =
-            db.Orders
-               .GroupBy(g => g.Name).Count();
-            //j.Ilość zamówień pogrupowanych po nazwie dla klienta o wskazanym identyfikatorze 
-            var ordersByClientIdGroupByNames =
-            db.Orders
-               .Where(r => r.ClientId == clientId)
-               .GroupBy(g => g.Name)
-               .Count();
-            //k.Zamówienia w podanym przedziale cenowym
-            var ordersBetweenTwoPrices =
-            db.Orders
-                .Where(s => s.Price >= Lower)
-                .Where(s => s.Price <= Upper)
-                .ToList();
-
-
         }
         private Boolean CheckExtension(String FilePath, out string WhatExtension)
         {
@@ -249,91 +175,391 @@ namespace BootcampCoreServices
             }
             foreach (DataRow col in dataTable.Rows)
             {
-                var x =
-                col.ItemArray[0].ToString();
-                var y =
-                System.Convert.ToInt64(col.ItemArray[1]);
-                var a =
-                col.ItemArray[2].ToString();
-                var b =
-            System.Convert.ToInt32(col.ItemArray[3]);
-                var c = Double.Parse(col.ItemArray[4].ToString(), CultureInfo.InvariantCulture);
-
-                long gf = (long)y;
+                var clientId = col.ItemArray[0].ToString();
+                var requestId = System.Convert.ToInt64(col.ItemArray[1]);
+                var name = col.ItemArray[2].ToString();
+                var quantity = System.Convert.ToInt32(col.ItemArray[3]);
+                var price = Double.Parse(col.ItemArray[4].ToString(), CultureInfo.InvariantCulture);
 
                 db.Orders.Add(new Request
                 {
-                    ClientId = x,
-                    RequestId = y,
-                    Name = a,
-                    Quantity = b,
-                    Price = c,
+                    ClientId = clientId,
+                    RequestId = requestId,
+                    Name = name,
+                    Quantity = quantity,
+                    Price = price,
                 });
 
-                XmlTextBlock.Text = XmlTextBlock.Text + (x
-                   + " " + y
-                   + " " + a
-                   + " " + b
-                   + " " + c
+                XmlTextBlock.Text = XmlTextBlock.Text + (clientId
+                   + " " + requestId
+                   + " " + name
+                   + " " + quantity
+                   + " " + price
                    + " ");
 
             }
             db.SaveChanges();
         }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
+        //a.Ilość zamówień
+        private void AmountOfOrders_Button_Click(object sender, RoutedEventArgs e)
         {
+            DataGrid1.Visibility = Visibility.Hidden;
+            RaportTextBlock.Visibility = Visibility.Visible;
+            HidePriceRangeItems();
+            var AmountOfOrders =
+            db.Orders
+                .Count();
+            RaportTextBlock.Text = "Ilość zamówień: " + AmountOfOrders.ToString() + Environment.NewLine;
+        }
+        //b.Ilość zamówień dla klienta o wskazanym identyfikatorze 
+        private void AmountOfOrdersByClientId_Button_Click(object sender, RoutedEventArgs e)
+        {
+            DataGrid1.Visibility = Visibility.Hidden;
+            HidePriceRangeItems();
+            ChooseClientIdWindow chooseClientIdWindow = new ChooseClientIdWindow();
+            chooseClientIdWindow.ClientIdComboBox.ItemsSource = (db.Orders).GroupBy(f => f.ClientId).ToList();
+            chooseClientIdWindow.ClientIdComboBox.DisplayMemberPath = "ClientId";
+            chooseClientIdWindow.ShowDialog();
+            var AmountOfOrdersByClientId =
+            db.Orders
+                .Where(s => s.ClientId.Equals(ChosenClientTextBlock.Text.ToString()))
+                .Count();
+            RaportTextBlock.Text = "Ilość zamówień dla klienta o wskazanym identyfikatorze: " + AmountOfOrdersByClientId.ToString() + Environment.NewLine;
+        }
+        //c.Łączna kwota zamówień 
+        private void TotalPriceOfOrders_Button_Click(object sender, RoutedEventArgs e)
+        {
+            DataGrid1.Visibility = Visibility.Hidden;
+            ChosenClientTextBlock.Visibility = Visibility.Hidden;
+            HeaderChosenClientTextBlock.Visibility = Visibility.Hidden;
+            HidePriceRangeItems();
+            var totalPriceOfOrders =
+            db.Orders
+                .Select(s => s.Price)
+                .Sum();
+            RaportTextBlock.Text = "Łączna kwota zamówień: " + totalPriceOfOrders.ToString() + Environment.NewLine;
+        }
+        //d.Łączna kwota zamówień dla klienta o wskazanym identyfikatorze 
+        private void TotalPriceOfOrdersByClientId_Button_Click(object sender, RoutedEventArgs e)
+        {
+            DataGrid1.Visibility = Visibility.Hidden;
+            HidePriceRangeItems();
+            ChooseClientIdWindow chooseClientIdWindow = new ChooseClientIdWindow();
+            chooseClientIdWindow.ClientIdComboBox.ItemsSource = (db.Orders).GroupBy(f => f.ClientId).ToList();
+            chooseClientIdWindow.ClientIdComboBox.DisplayMemberPath = "ClientId";
+            chooseClientIdWindow.ShowDialog();
+            var totalPriceOfOrdersByClientId =
+            db.Orders
+                .Where(d => d.ClientId.Equals(ChosenClientTextBlock.Text.ToString()))
+                .Select(s => s.Price)
+                .Sum();
+            RaportTextBlock.Text = "Łączna kwota zamówień dla klienta o wskazanym identyfikatorze: " + totalPriceOfOrdersByClientId.ToString() + Environment.NewLine;
+        }
+        //e.Lista wszystkich zamówień 
+        private void ListOfAllOrders_Button_Click(object sender, RoutedEventArgs e)
+        {
+            ChosenClientTextBlock.Visibility = Visibility.Hidden;
+            HeaderChosenClientTextBlock.Visibility = Visibility.Hidden;
+            RaportTextBlock.Visibility = Visibility.Hidden;
+            HidePriceRangeItems();
+            var listOfAllOrders = db.Orders.ToList();
+            string sortBy = SortByCommonBox.SelectedItem.ToString();
+            if (sortBy == "System.Windows.Controls.ComboBoxItem: ClientId")
+            {
+                var query =
+                 from item in db.Orders
+                 orderby item.ClientId
+                 select new { item.Name, item.ClientId, item.Quantity, item.RequestId, item.Price };
+                DataGrid1.Visibility = Visibility.Visible;
+                DataGrid1.ItemsSource = query.ToList();
+
+            }
+            else if (sortBy == "System.Windows.Controls.ComboBoxItem: RequestId")
+            {
+
+                var query =
+                 from item in db.Orders
+                 orderby item.RequestId
+                 select new { item.Name, item.ClientId, item.Quantity, item.RequestId, item.Price };
+                DataGrid1.Visibility = Visibility.Visible;
+                DataGrid1.ItemsSource = query.ToList();
+            }
+            else if (sortBy == "System.Windows.Controls.ComboBoxItem: Name")
+            {
+                var query =
+                 from item in db.Orders
+                 orderby item.Name
+                 select new { item.Name, item.ClientId, item.Quantity, item.RequestId, item.Price };
+                DataGrid1.Visibility = Visibility.Visible;
+                DataGrid1.ItemsSource = query.ToList();
+
+            }
+            else if (sortBy == "System.Windows.Controls.ComboBoxItem: Quantity")
+            {
+
+                var query =
+                 from item in db.Orders
+                 orderby item.Quantity
+                 select new { item.Name, item.ClientId, item.Quantity, item.RequestId, item.Price };
+                DataGrid1.Visibility = Visibility.Visible;
+                DataGrid1.ItemsSource = query.ToList();
+            }
+            else if (sortBy == "System.Windows.Controls.ComboBoxItem: Price")
+            {
+
+                var query =
+                 from item in db.Orders
+                 orderby item.Price
+                 select new { item.Name, item.ClientId, item.Quantity, item.RequestId, item.Price };
+                DataGrid1.Visibility = Visibility.Visible;
+                DataGrid1.ItemsSource = query.ToList();
+            }
 
         }
-
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        //f.Lista zamówień dla klienta o wskazanym identyfikatorze 
+        private void ListOfOrdersByClientId_Button_Click(object sender, RoutedEventArgs e)
         {
+            HidePriceRangeItems();
+            RaportTextBlock.Visibility = Visibility.Hidden;
+            DataGrid1.Visibility = Visibility.Visible;
+            ChooseClientIdWindow chooseClientIdWindow = new ChooseClientIdWindow();
+            chooseClientIdWindow.ClientIdComboBox.ItemsSource = (db.Orders).GroupBy(f => f.ClientId).ToList();
+            chooseClientIdWindow.ClientIdComboBox.DisplayMemberPath = "ClientId";
+            chooseClientIdWindow.ShowDialog();
+            var listOfAllOrders = db.Orders.ToList();
+            string sortBy = SortByCommonBox.SelectedItem.ToString();
+            if (sortBy == "System.Windows.Controls.ComboBoxItem: ClientId")
+            {
+                var query =
+                 from item in db.Orders
+                 where item.ClientId == ChosenClientTextBlock.Text.ToString()
+                 orderby item.ClientId
+                 select new { item.Name, item.ClientId, item.Quantity, item.RequestId, item.Price };
+                DataGrid1.ItemsSource = query.ToList();
+
+            }
+            else if (sortBy == "System.Windows.Controls.ComboBoxItem: RequestId")
+            {
+
+                var query =
+                 from item in db.Orders
+                 where item.ClientId == ChosenClientTextBlock.Text.ToString()
+                 orderby item.RequestId
+                 select new { item.Name, item.ClientId, item.Quantity, item.RequestId, item.Price };
+                DataGrid1.ItemsSource = query.ToList();
+            }
+            else if (sortBy == "System.Windows.Controls.ComboBoxItem: Name")
+            {
+                var query =
+                 from item in db.Orders
+                 where item.ClientId == ChosenClientTextBlock.Text.ToString()
+                 orderby item.Name
+                 select new { item.Name, item.ClientId, item.Quantity, item.RequestId, item.Price };
+                DataGrid1.ItemsSource = query.ToList();
+
+            }
+            else if (sortBy == "System.Windows.Controls.ComboBoxItem: Quantity")
+            {
+
+                var query =
+                 from item in db.Orders
+                 where item.ClientId == ChosenClientTextBlock.Text.ToString()
+                 orderby item.Quantity
+                 select new { item.Name, item.ClientId, item.Quantity, item.RequestId, item.Price };
+                DataGrid1.ItemsSource = query.ToList();
+            }
+            else if (sortBy == "System.Windows.Controls.ComboBoxItem: Price")
+            {
+
+                var query =
+                 from item in db.Orders
+                 where item.ClientId == ChosenClientTextBlock.Text.ToString()
+                 orderby item.Price
+                 select new { item.Name, item.ClientId, item.Quantity, item.RequestId, item.Price };
+                DataGrid1.ItemsSource = query.ToList();
+            }
+        }
+        //g.Średnia wartość zamówienia
+        private void AveragePricesOfOrders_Button_Click(object sender, RoutedEventArgs e)
+        {
+            HidePriceRangeItems();
+            DataGrid1.Visibility = Visibility.Hidden;
+            RaportTextBlock.Visibility = Visibility.Visible;
+            var AveragePricesOfOrders =
+            db.Orders
+               .Average(f => f.Price);
+            RaportTextBlock.Text = "Średnia wartość zamówienia: " + AveragePricesOfOrders.ToString() + Environment.NewLine;
+        }
+        //h.Średnia wartość zamówienia dla klienta o wskazanym identyfikatorze 
+        private void AveragePriceOfOrdersByClientIdButton_Click(object sender, RoutedEventArgs e)
+        {
+            HidePriceRangeItems();
+            DataGrid1.Visibility = Visibility.Hidden;
+            RaportTextBlock.Visibility = Visibility.Visible;
+            ChooseClientIdWindow chooseClientIdWindow = new ChooseClientIdWindow();
+            chooseClientIdWindow.ClientIdComboBox.ItemsSource = (db.Orders).GroupBy(f => f.ClientId).ToList();
+            chooseClientIdWindow.ClientIdComboBox.DisplayMemberPath = "ClientId";
+            chooseClientIdWindow.ShowDialog();
+            var averagePriceOfOrdersByClientId =
+            db.Orders
+               .Where(r => r.ClientId == ChosenClientTextBlock.Text.ToString())
+               .Average(f => f.Price);
+            RaportTextBlock.Text = "Średnia wartość zamówienia dla klienta o wskazanym identyfikatorze : " + averagePriceOfOrdersByClientId.ToString() + Environment.NewLine;
+        }
+        //i.Ilość zamówień pogrupowanych po nazwie 
+        private void OrdersGroupByNames_Button_Click(object sender, RoutedEventArgs e)
+        {
+            RaportTextBlock.Text = " ";
+            HidePriceRangeItems();
+            DataGrid1.Visibility = Visibility.Hidden;
+            RaportTextBlock.Visibility = Visibility.Visible;
+
+            var ordersGroupByNames =
+            db.Orders
+               .GroupBy(g => new { g.Name })
+         .Select(k => new { items = k.Key.Name, howManyItems = k.Count()});
+            foreach (var item in ordersGroupByNames)
+            {
+                RaportTextBlock.Text = RaportTextBlock.Text  + "" + item.items + " " + item.howManyItems + " " + Environment.NewLine;
+            }
+            
+        }
+        //j.Ilość zamówień pogrupowanych po nazwie dla klienta o wskazanym identyfikatorze 
+        private void OrdersByClientIdGroupByNames_Button_Click(object sender, RoutedEventArgs e)
+        {
+            RaportTextBlock.Text = " ";
+            HidePriceRangeItems();
+            DataGrid1.Visibility = Visibility.Hidden;
+            RaportTextBlock.Visibility = Visibility.Visible;
+
+            ChooseClientIdWindow chooseClientIdWindow = new ChooseClientIdWindow();
+            chooseClientIdWindow.ClientIdComboBox.ItemsSource = (db.Orders).GroupBy(f => f.ClientId).ToList();
+            chooseClientIdWindow.ClientIdComboBox.DisplayMemberPath = "ClientId";
+            chooseClientIdWindow.ShowDialog();
+            var ordersByClientIdGroupByNames =
+            db.Orders
+               .Where(r => r.ClientId == ChosenClientTextBlock.Text.ToString())
+               .GroupBy(g => new { g.Name})
+         .Select(k => new { items = k.Key.Name, howManyItems = k.Count() });
+            foreach (var item in ordersByClientIdGroupByNames)
+            {
+                RaportTextBlock.Text = RaportTextBlock.Text + "" + item.items + " " + item.howManyItems + " " + Environment.NewLine;
+            }
 
         }
-
-        private void Button_Click_2(object sender, RoutedEventArgs e)
+        //k.Zamówienia w podanym przedziale cenowym
+        private void OrdersBetweenTwoPrices_Button_Click(object sender, RoutedEventArgs e)
         {
+            ShowPriceRangeItems();
+            ChoosePricesWindow choosePricesWindow = new ChoosePricesWindow();
 
+            choosePricesWindow.ShowDialog();
+            ShowPriceRangeItems();
+            if (ChosenLowerLimitTextBlock.Text=="" && ChosenLowerLimitTextBlock.Text==null)
+            {
+
+                MessageBox.Show("Nie podano ograniczeń!");
+            }
+            double lowerLimit = Double.Parse(ChosenLowerLimitTextBlock.Text.ToString(), CultureInfo.InvariantCulture);
+            double upeerLimit = Double.Parse(ChosenUpperLimitTextBlock.Text.ToString(), CultureInfo.InvariantCulture);
+            //var ordersBetweenTwoPrices =
+            //db.Orders
+            //    .Where(s => s.Price >= lowerLimit)
+            //    .Where(s => s.Price <= upeerLimit)
+            //    .ToList();
+            string sortBy = SortByCommonBox.SelectedItem.ToString();
+            if (sortBy == "System.Windows.Controls.ComboBoxItem: ClientId")
+            {
+                var query =
+                 from item in db.Orders
+                .Where(s => s.Price >= lowerLimit)
+                .Where(s => s.Price <= upeerLimit)
+                 orderby item.ClientId
+                 select new { item.Name, item.ClientId, item.Quantity, item.RequestId, item.Price };
+                DataGrid1.Visibility = Visibility.Visible;
+                DataGrid1.ItemsSource = query.ToList();
+
+            }
+            else if (sortBy == "System.Windows.Controls.ComboBoxItem: RequestId")
+            {
+
+                var query =
+                 from item in db.Orders
+                .Where(s => s.Price >= lowerLimit)
+                .Where(s => s.Price <= upeerLimit)
+                 orderby item.RequestId
+                 select new { item.Name, item.ClientId, item.Quantity, item.RequestId, item.Price };
+                DataGrid1.Visibility = Visibility.Visible;
+                DataGrid1.ItemsSource = query.ToList();
+            }
+            else if (sortBy == "System.Windows.Controls.ComboBoxItem: Name")
+            {
+                var query =
+                 from item in db.Orders
+                .Where(s => s.Price >= lowerLimit)
+                .Where(s => s.Price <= upeerLimit)
+                 orderby item.Name
+                 select new { item.Name, item.ClientId, item.Quantity, item.RequestId, item.Price };
+                DataGrid1.Visibility = Visibility.Visible;
+                DataGrid1.ItemsSource = query.ToList();
+
+            }
+            else if (sortBy == "System.Windows.Controls.ComboBoxItem: Quantity")
+            {
+
+                var query =
+                 from item in db.Orders
+                .Where(s => s.Price >= lowerLimit)
+                .Where(s => s.Price <= upeerLimit)
+                 orderby item.Quantity
+                 select new { item.Name, item.ClientId, item.Quantity, item.RequestId, item.Price };
+                DataGrid1.Visibility = Visibility.Visible;
+                DataGrid1.ItemsSource = query.ToList();
+            }
+            else if (sortBy == "System.Windows.Controls.ComboBoxItem: Price")
+            {
+
+                var query =
+                 from item in db.Orders
+                .Where(s => s.Price >= lowerLimit)
+                .Where(s => s.Price <= upeerLimit)
+                 orderby item.Price
+                 select new { item.Name, item.ClientId, item.Quantity, item.RequestId, item.Price };
+                DataGrid1.Visibility = Visibility.Visible;
+                DataGrid1.ItemsSource = query.ToList();
+            }
         }
-
-        private void Button_Click_3(object sender, RoutedEventArgs e)
+        public void HidePriceRangeItems()
         {
-
+            HeaderPriceRangeTextBlock.Visibility = Visibility.Hidden;
+            HeaderUpperLimitTextBlock.Visibility = Visibility.Hidden;
+            HeaderLowerLimitTextBlock.Visibility = Visibility.Hidden;
+            ChosenUpperLimitTextBlock.Visibility = Visibility.Hidden;
+            ChosenLowerLimitTextBlock.Visibility = Visibility.Hidden;
         }
-
-        private void Button_Click_4(object sender, RoutedEventArgs e)
+        public void ShowPriceRangeItems()
         {
-
+            HeaderPriceRangeTextBlock.Visibility = Visibility.Visible;
+            HeaderUpperLimitTextBlock.Visibility = Visibility.Visible;
+            HeaderLowerLimitTextBlock.Visibility = Visibility.Visible;
+            ChosenUpperLimitTextBlock.Visibility = Visibility.Visible;
+            ChosenLowerLimitTextBlock.Visibility = Visibility.Visible;
         }
-
-        private void Button_Click_5(object sender, RoutedEventArgs e)
+        public void ShowRaportButtons()
         {
-
-        }
-
-        private void Button_Click_6(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void Button_Click_7(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void Button_Click_8(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void Button_Click_9(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void Button_Click_10(object sender, RoutedEventArgs e)
-        {
-
+            AmountOfOrders_Button.Visibility = Visibility.Visible;
+            AmountOfOrdersByClientId_Button.Visibility = Visibility.Visible;
+            TotalPriceOfOrders_Button.Visibility = Visibility.Visible;
+            TotalPriceOfOrdersByClientId_Button.Visibility = Visibility.Visible;
+            ListOfAllOrders_Button.Visibility = Visibility.Visible;
+            ListOfOrdersByClientId_Button.Visibility = Visibility.Visible;
+            AveragePricesOfOrders_Button.Visibility = Visibility.Visible;
+            AveragePriceOfOrdersByClientIdButton.Visibility = Visibility.Visible;
+            OrdersGroupByNames_Button.Visibility = Visibility.Visible;
+            OrdersByClientIdGroupByNames_Button.Visibility = Visibility.Visible;
+            OrdersBetweenTwoPrices_Button.Visibility = Visibility.Visible;
+            SortByCommonBox.Visibility = Visibility.Visible;
+            SortByHeaderTextBlock.Visibility = Visibility.Visible;
         }
     }
 
