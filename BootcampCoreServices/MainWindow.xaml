@@ -21,29 +21,28 @@
         <!-- Type of file section-->
         <TextBlock x:Name="HeaderTypeOfFileTextBlock" Visibility="Hidden" HorizontalAlignment="Left" Margin="10,11,0,0" TextWrapping="Wrap" Text="Wczytano plik z rozszerzeniem: " VerticalAlignment="Top" Foreground="Red" FontWeight="Bold"/>
         <TextBlock x:Name="TypeOfFileTextBlock" HorizontalAlignment="Left" Margin="206,11,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Foreground="Red" FontWeight="Bold"/>
-        <TextBlock x:Name="XmlTextBlock" HorizontalAlignment="Left" Margin="268,10,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Height="48" Width="75" Foreground="Red"/>
 
 
         <!-- Raport menu section-->
-        <ComboBox x:Name="SortByCommonBox" HorizontalAlignment="Left" Margin="87,42,0,0" VerticalAlignment="Top" Width="120">
+        <ComboBox x:Name="SortByCommonBox" Visibility="Hidden"  HorizontalAlignment="Left" Margin="87,42,0,0" VerticalAlignment="Top" Width="120">
             <ComboBoxItem>ClientId</ComboBoxItem>
             <ComboBoxItem IsSelected="True">RequestId</ComboBoxItem>
             <ComboBoxItem>Name</ComboBoxItem>
             <ComboBoxItem>Quantity</ComboBoxItem>
             <ComboBoxItem>Price</ComboBoxItem>
         </ComboBox>
-        <TextBlock  x:Name="SortByHeaderTextBlock" HorizontalAlignment="Left" Margin="10,45,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="16" Width="64" FontWeight="Bold" Foreground="Red" Text="Sortuj po:"/>
-        <Button x:Name="AmountOfOrders_Button" Content="Ilość zamówień" HorizontalAlignment="Left" Margin="10,71,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="AmountOfOrders_Button_Click"/>
-        <Button x:Name="AmountOfOrdersByClientId_Button" Content="Ilość zamówień dla klienta o wskazanym identyfikatorze " HorizontalAlignment="Left" Margin="10,99,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="AmountOfOrdersByClientId_Button_Click"/>
-        <Button x:Name="TotalPriceOfOrders_Button" Content="Łączna kwota zamówień " HorizontalAlignment="Left" Margin="10,125,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="TotalPriceOfOrders_Button_Click"/>
-        <Button x:Name="TotalPriceOfOrdersByClientId_Button" Content="Łączna kwota zamówień dla klienta o wskazanym &#xD;&#xA;identyfikatorze  " HorizontalAlignment="Left" Margin="10,150,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="TotalPriceOfOrdersByClientId_Button_Click"/>
-        <Button x:Name="ListOfAllOrders_Button" Content="Lista wszystkich zamówień  " HorizontalAlignment="Left" Margin="10,189,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="ListOfAllOrders_Button_Click"/>
-        <Button x:Name="ListOfOrdersByClientId_Button" Content="Lista zamówień dla klienta o wskazanym identyfikatorze " HorizontalAlignment="Left" Margin="10,214,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="ListOfOrdersByClientId_Button_Click"/>
-        <Button x:Name="AveragePricesOfOrders_Button" Content="Średnia wartość zamówienia" HorizontalAlignment="Left" Margin="10,315,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="AveragePricesOfOrders_Button_Click"/>
-        <Button x:Name="AveragePriceOfOrdersByClientIdButton" Content="Średnia wartość zamówienia dla klienta o wskazanym&#xD;&#xA; identyfikatorze  " HorizontalAlignment="Left" Margin="10,240,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="AveragePriceOfOrdersByClientIdButton_Click" Height="45"/>
-        <Button x:Name="OrdersGroupByNames_Button" Content="Ilość zamówień pogrupowanych po nazwie  " HorizontalAlignment="Left" Margin="10,290,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="OrdersGroupByNames_Button_Click"/>
-        <Button x:Name="OrdersByClientIdGroupByNames_Button" Content="Ilość zamówień pogrupowanych &#xD;&#xA;po nazwie dla klienta o wskazanym identyfikatorze " HorizontalAlignment="Left" Margin="10,340,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="OrdersByClientIdGroupByNames_Button_Click" Height="44"/>
-        <Button x:Name="OrdersBetweenTwoPrices_Button" Content="Zamówienia w podanym przedziale cenowym" HorizontalAlignment="Left" Margin="10,389,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="OrdersBetweenTwoPrices_Button_Click"/>
+        <TextBlock  x:Name="SortByHeaderTextBlock" Visibility="Hidden"  HorizontalAlignment="Left" Margin="10,45,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="16" Width="64" FontWeight="Bold" Foreground="Red" Text="Sortuj po:"/>
+        <Button x:Name="AmountOfOrders_Button" Visibility="Hidden"  Content="Ilość zamówień" HorizontalAlignment="Left" Margin="10,71,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="AmountOfOrders_Button_Click"/>
+        <Button x:Name="AmountOfOrdersByClientId_Button" Visibility="Hidden"  Content="Ilość zamówień dla klienta o wskazanym identyfikatorze " HorizontalAlignment="Left" Margin="10,99,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="AmountOfOrdersByClientId_Button_Click"/>
+        <Button x:Name="TotalPriceOfOrders_Button" Visibility="Hidden"  Content="Łączna kwota zamówień " HorizontalAlignment="Left" Margin="10,125,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="TotalPriceOfOrders_Button_Click"/>
+        <Button x:Name="TotalPriceOfOrdersByClientId_Button" Visibility="Hidden"  Content="Łączna kwota zamówień dla klienta o wskazanym &#xD;&#xA;identyfikatorze  " HorizontalAlignment="Left" Margin="10,150,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="TotalPriceOfOrdersByClientId_Button_Click"/>
+        <Button x:Name="ListOfAllOrders_Button" Visibility="Hidden"  Content="Lista wszystkich zamówień  " HorizontalAlignment="Left" Margin="10,189,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="ListOfAllOrders_Button_Click"/>
+        <Button x:Name="ListOfOrdersByClientId_Button" Visibility="Hidden"  Content="Lista zamówień dla klienta o wskazanym identyfikatorze " HorizontalAlignment="Left" Margin="10,214,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="ListOfOrdersByClientId_Button_Click"/>
+        <Button x:Name="AveragePricesOfOrders_Button" Visibility="Hidden"  Content="Średnia wartość zamówienia" HorizontalAlignment="Left" Margin="10,315,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="AveragePricesOfOrders_Button_Click"/>
+        <Button x:Name="AveragePriceOfOrdersByClientIdButton" Visibility="Hidden"  Content="Średnia wartość zamówienia dla klienta o wskazanym&#xD;&#xA; identyfikatorze  " HorizontalAlignment="Left" Margin="10,240,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="AveragePriceOfOrdersByClientIdButton_Click" Height="45"/>
+        <Button x:Name="OrdersGroupByNames_Button" Visibility="Hidden"  Content="Ilość zamówień pogrupowanych po nazwie  " HorizontalAlignment="Left" Margin="10,290,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="OrdersGroupByNames_Button_Click"/>
+        <Button x:Name="OrdersByClientIdGroupByNames_Button" Visibility="Hidden"  Content="Ilość zamówień pogrupowanych &#xD;&#xA;po nazwie dla klienta o wskazanym identyfikatorze " HorizontalAlignment="Left" Margin="10,340,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="OrdersByClientIdGroupByNames_Button_Click" Height="44"/>
+        <Button x:Name="OrdersBetweenTwoPrices_Button" Visibility="Hidden"  Content="Zamówienia w podanym przedziale cenowym" HorizontalAlignment="Left" Margin="10,389,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="OrdersBetweenTwoPrices_Button_Click"/>
 
 
         <!-- Chosen clientId section-->

@@ -48,7 +48,6 @@ namespace BootcampCoreServices
                     string whatExtension;
                     if (CheckExtension(filePath, out whatExtension))
                     {
-                        ShowRaportButtons();
                         HeaderTypeOfFileTextBlock.Visibility = Visibility.Visible;
                         if (whatExtension == ".csv")
                         {
@@ -117,14 +116,6 @@ namespace BootcampCoreServices
                 foreach (var item in myDeserializedObjList)
                 {
                     db.Orders.Add(new Request { ClientId = item.ClientId, Name = item.Name, Price = item.Price, Quantity = item.Quantity, RequestId = item.RequestId });
-
-                    XmlTextBlock.Text = XmlTextBlock.Text + (
-                        item.ClientId.ToString() + " " +
-                        item.Name.ToString() + " " +
-                        item.Price.ToString() + " " +
-                        item.Quantity.ToString() + " " +
-                        item.RequestId.ToString()) +
-                        " ";
                 }
                 db.SaveChanges();
             }
@@ -139,14 +130,6 @@ namespace BootcampCoreServices
                 foreach (var item in data.requests)
                 {
                     db.Orders.Add(new Request { ClientId = item.ClientId, Name = item.Name, Price = item.Price, Quantity = item.Quantity, RequestId = item.RequestId });
-
-                    XmlTextBlock.Text = XmlTextBlock.Text + (
-                        item.ClientId.ToString() + " " +
-                        item.Name.ToString() + " " +
-                        item.Price.ToString() + " " +
-                        item.Quantity.ToString() + " " +
-                        item.RequestId.ToString()) +
-                        " ";
                 }
                 db.SaveChanges();
             }
@@ -180,7 +163,6 @@ namespace BootcampCoreServices
                 var name = col.ItemArray[2].ToString();
                 var quantity = System.Convert.ToInt32(col.ItemArray[3]);
                 var price = Double.Parse(col.ItemArray[4].ToString(), CultureInfo.InvariantCulture);
-
                 db.Orders.Add(new Request
                 {
                     ClientId = clientId,
@@ -189,14 +171,6 @@ namespace BootcampCoreServices
                     Quantity = quantity,
                     Price = price,
                 });
-
-                XmlTextBlock.Text = XmlTextBlock.Text + (clientId
-                   + " " + requestId
-                   + " " + name
-                   + " " + quantity
-                   + " " + price
-                   + " ");
-
             }
             db.SaveChanges();
         }
@@ -431,7 +405,6 @@ namespace BootcampCoreServices
             HidePriceRangeItems();
             DataGrid1.Visibility = Visibility.Hidden;
             RaportTextBlock.Visibility = Visibility.Visible;
-
             ChooseClientIdWindow chooseClientIdWindow = new ChooseClientIdWindow();
             chooseClientIdWindow.ClientIdComboBox.ItemsSource = (db.Orders).GroupBy(f => f.ClientId).ToList();
             chooseClientIdWindow.ClientIdComboBox.DisplayMemberPath = "ClientId";
@@ -445,89 +418,86 @@ namespace BootcampCoreServices
             {
                 RaportTextBlock.Text = RaportTextBlock.Text + "" + item.items + " " + item.howManyItems + " " + Environment.NewLine;
             }
-
         }
         //k.Zamówienia w podanym przedziale cenowym
         private void OrdersBetweenTwoPrices_Button_Click(object sender, RoutedEventArgs e)
         {
             ShowPriceRangeItems();
+            ShowDataGridHideTextBlock();
             ChoosePricesWindow choosePricesWindow = new ChoosePricesWindow();
-
             choosePricesWindow.ShowDialog();
-            ShowPriceRangeItems();
-            if (ChosenLowerLimitTextBlock.Text=="" && ChosenLowerLimitTextBlock.Text==null)
+            if (ChosenLowerLimitTextBlock.Text=="" || ChosenLowerLimitTextBlock.Text==null ||
+                ChosenUpperLimitTextBlock.Text == "" || ChosenUpperLimitTextBlock.Text == null)
             {
-
-                MessageBox.Show("Nie podano ograniczeń!");
+                MessageBox.Show("Nie podano ograniczeń! Generuj raport ponownie i podaj ograniczenia!");
             }
-            double lowerLimit = Double.Parse(ChosenLowerLimitTextBlock.Text.ToString(), CultureInfo.InvariantCulture);
-            double upeerLimit = Double.Parse(ChosenUpperLimitTextBlock.Text.ToString(), CultureInfo.InvariantCulture);
-            //var ordersBetweenTwoPrices =
-            //db.Orders
-            //    .Where(s => s.Price >= lowerLimit)
-            //    .Where(s => s.Price <= upeerLimit)
-            //    .ToList();
-            string sortBy = SortByCommonBox.SelectedItem.ToString();
-            if (sortBy == "System.Windows.Controls.ComboBoxItem: ClientId")
+            else
             {
-                var query =
-                 from item in db.Orders
-                .Where(s => s.Price >= lowerLimit)
-                .Where(s => s.Price <= upeerLimit)
-                 orderby item.ClientId
-                 select new { item.Name, item.ClientId, item.Quantity, item.RequestId, item.Price };
-                DataGrid1.Visibility = Visibility.Visible;
-                DataGrid1.ItemsSource = query.ToList();
+                double lowerLimit = Double.Parse(ChosenLowerLimitTextBlock.Text.ToString(), CultureInfo.InvariantCulture);
+                double upeerLimit = Double.Parse(ChosenUpperLimitTextBlock.Text.ToString(), CultureInfo.InvariantCulture);
+                string sortBy = SortByCommonBox.SelectedItem.ToString();
+                if (sortBy == "System.Windows.Controls.ComboBoxItem: ClientId")
+                {
+                    var query =
+                     from item in db.Orders
+                    .Where(s => s.Price >= lowerLimit)
+                    .Where(s => s.Price <= upeerLimit)
+                     orderby item.ClientId
+                     select new { item.Name, item.ClientId, item.Quantity, item.RequestId, item.Price };
+                    DataGrid1.ItemsSource = query.ToList();
 
-            }
-            else if (sortBy == "System.Windows.Controls.ComboBoxItem: RequestId")
-            {
+                }
+                else if (sortBy == "System.Windows.Controls.ComboBoxItem: RequestId")
+                {
+                    var query =
+                     from item in db.Orders
+                    .Where(s => s.Price >= lowerLimit)
+                    .Where(s => s.Price <= upeerLimit)
+                     orderby item.RequestId
+                     select new { item.Name, item.ClientId, item.Quantity, item.RequestId, item.Price };
+                    DataGrid1.ItemsSource = query.ToList();
+                }
+                else if (sortBy == "System.Windows.Controls.ComboBoxItem: Name")
+                {
+                    var query =
+                     from item in db.Orders
+                    .Where(s => s.Price >= lowerLimit)
+                    .Where(s => s.Price <= upeerLimit)
+                     orderby item.Name
+                     select new { item.Name, item.ClientId, item.Quantity, item.RequestId, item.Price };
+                    DataGrid1.ItemsSource = query.ToList();
 
-                var query =
-                 from item in db.Orders
-                .Where(s => s.Price >= lowerLimit)
-                .Where(s => s.Price <= upeerLimit)
-                 orderby item.RequestId
-                 select new { item.Name, item.ClientId, item.Quantity, item.RequestId, item.Price };
-                DataGrid1.Visibility = Visibility.Visible;
-                DataGrid1.ItemsSource = query.ToList();
+                }
+                else if (sortBy == "System.Windows.Controls.ComboBoxItem: Quantity")
+                {
+                    var query =
+                     from item in db.Orders
+                    .Where(s => s.Price >= lowerLimit)
+                    .Where(s => s.Price <= upeerLimit)
+                     orderby item.Quantity
+                     select new { item.Name, item.ClientId, item.Quantity, item.RequestId, item.Price };
+                    DataGrid1.ItemsSource = query.ToList();
+                }
+                else if (sortBy == "System.Windows.Controls.ComboBoxItem: Price")
+                {
+                    var query =
+                     from item in db.Orders
+                    .Where(s => s.Price >= lowerLimit)
+                    .Where(s => s.Price <= upeerLimit)
+                     orderby item.Price
+                     select new { item.Name, item.ClientId, item.Quantity, item.RequestId, item.Price };
+                    DataGrid1.ItemsSource = query.ToList();
+                }
             }
-            else if (sortBy == "System.Windows.Controls.ComboBoxItem: Name")
-            {
-                var query =
-                 from item in db.Orders
-                .Where(s => s.Price >= lowerLimit)
-                .Where(s => s.Price <= upeerLimit)
-                 orderby item.Name
-                 select new { item.Name, item.ClientId, item.Quantity, item.RequestId, item.Price };
-                DataGrid1.Visibility = Visibility.Visible;
-                DataGrid1.ItemsSource = query.ToList();
+        }
+        public void ShowDataGridHideTextBlock()
+        {
+            RaportTextBlock.Visibility = Visibility.Hidden;
+            DataGrid1.Visibility = Visibility.Visible;
+        }
+        public void HideDataGridShowTextBlock()
+        {
 
-            }
-            else if (sortBy == "System.Windows.Controls.ComboBoxItem: Quantity")
-            {
-
-                var query =
-                 from item in db.Orders
-                .Where(s => s.Price >= lowerLimit)
-                .Where(s => s.Price <= upeerLimit)
-                 orderby item.Quantity
-                 select new { item.Name, item.ClientId, item.Quantity, item.RequestId, item.Price };
-                DataGrid1.Visibility = Visibility.Visible;
-                DataGrid1.ItemsSource = query.ToList();
-            }
-            else if (sortBy == "System.Windows.Controls.ComboBoxItem: Price")
-            {
-
-                var query =
-                 from item in db.Orders
-                .Where(s => s.Price >= lowerLimit)
-                .Where(s => s.Price <= upeerLimit)
-                 orderby item.Price
-                 select new { item.Name, item.ClientId, item.Quantity, item.RequestId, item.Price };
-                DataGrid1.Visibility = Visibility.Visible;
-                DataGrid1.ItemsSource = query.ToList();
-            }
         }
         public void HidePriceRangeItems()
         {
