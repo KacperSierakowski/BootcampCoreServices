@@ -1,0 +1,16 @@
+﻿<Window x:Class="BootcampCoreServices.RaportJWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BootcampCoreServices"
+        mc:Ignorable="d"
+         Title="RaportJWindow" Height="250" Width="200"
+        Background="Black">
+    <Grid>
+        <TextBlock HorizontalAlignment="Left" Margin="24,38,0,0" TextWrapping="Wrap" Text="ID Klienta: " VerticalAlignment="Top" Foreground="Red" FontWeight="Bold"/>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="24,59,0,0" TextWrapping="Wrap" Text="ClientId" VerticalAlignment="Top" Width="120"/>
+        <Button Content="Akceptuj" HorizontalAlignment="Left" Margin="24,87,0,0" VerticalAlignment="Top" Width="120" Background="Red" Height="45"/>
+
+    </Grid>
+</Window>

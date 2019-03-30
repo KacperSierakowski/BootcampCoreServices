@@ -5,8 +5,35 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BootcampCoreServices"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800" Background="Black">
     <Grid>
-        
+        <Image HorizontalAlignment="Left" Source="Images/UI_upload.png" Drop="Window_Drop" AllowDrop="true" Height="133" Margin="335,281,0,0" VerticalAlignment="Top" Width="135"/>
+        <TextBlock x:Name="XmlTextBlock" HorizontalAlignment="Left" Margin="230,10,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Height="48" Width="75" Foreground="Red"/>
+        <ListBox x:Name="OutputRaport" HorizontalAlignment="Left" Height="48" Margin="463,10,0,0" VerticalAlignment="Top" Width="319"/>
+        <TextBlock HorizontalAlignment="Left" Margin="315,256,0,0" TextWrapping="Wrap" Text="Drag and Drop file here:" VerticalAlignment="Top" Foreground="Red" FontWeight="Bold"/>
+        <Button x:Name="GenerateARaportButton" Content="Generate raport" HorizontalAlignment="Left" Margin="335,24,0,0" VerticalAlignment="Top" Width="105" Click="GenerateRaport" Height="40" Background="Red" FontWeight="Bold"/>
+        <TextBlock HorizontalAlignment="Left" Margin="22,7,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Foreground="Red" FontWeight="Bold"/>
+        <ComboBox x:Name="SortByCommonBox" HorizontalAlignment="Left" Margin="87,42,0,0" VerticalAlignment="Top" Width="120">
+            <ComboBoxItem>ClientId</ComboBoxItem>
+            <ComboBoxItem IsSelected="True">RequestId</ComboBoxItem>
+            <ComboBoxItem>Name</ComboBoxItem>
+            <ComboBoxItem>Quantity</ComboBoxItem>
+            <ComboBoxItem>Price</ComboBoxItem>
+        </ComboBox>
+        <TextBlock HorizontalAlignment="Left" Margin="10,45,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="16" Width="64" FontWeight="Bold" Foreground="Red" Text="Sortuj po:"/>
+        <TextBlock x:Name="TypeOfFileTextBlock" HorizontalAlignment="Left" Margin="140,7,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Foreground="Red" FontWeight="Bold"/>
+        <TextBlock x:Name="RaportTextBlock" HorizontalAlignment="Left" Margin="485,71,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="323" Width="280" Foreground="Red"/>
+        <Button Content="Ilość zamówień" HorizontalAlignment="Left" Margin="10,71,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="Button_Click"/>
+        <Button Content="Ilość zamówień dla klienta o wskazanym identyfikatorze " HorizontalAlignment="Left" Margin="10,99,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="Button_Click_1"/>
+        <Button Content="Łączna kwota zamówień " HorizontalAlignment="Left" Margin="10,125,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="Button_Click_2"/>
+        <Button Content="Łączna kwota zamówień dla klienta o wskazanym &#xD;&#xA;identyfikatorze  " HorizontalAlignment="Left" Margin="10,150,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="Button_Click_3"/>
+        <Button Content="Lista wszystkich zamówień  " HorizontalAlignment="Left" Margin="10,189,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="Button_Click_4"/>
+        <Button Content="Lista zamówień dla klienta o wskazanym identyfikatorze " HorizontalAlignment="Left" Margin="10,214,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="Button_Click_5"/>
+        <Button Content="Średnia wartość zamówienia" HorizontalAlignment="Left" Margin="10,315,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="Button_Click_8"/>
+        <Button Content="Średnia wartość zamówienia dla klienta o wskazanym&#xD;&#xA; identyfikatorze  " HorizontalAlignment="Left" Margin="10,240,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="Button_Click_6" Height="45"/>
+        <Button Content="Ilość zamówień pogrupowanych po nazwie  " HorizontalAlignment="Left" Margin="10,290,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="Button_Click_7"/>
+        <Button Content="Ilość zamówień pogrupowanych &#xD;&#xA;po nazwie dla klienta o wskazanym identyfikatorze " HorizontalAlignment="Left" Margin="10,340,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="Button_Click_9" Height="44"/>
+        <Button Content="Zamówienia w podanym przedziale cenowym" HorizontalAlignment="Left" Margin="10,389,0,0" VerticalAlignment="Top" Width="300" Background="Red" Click="Button_Click_10"/>
+
     </Grid>
 </Window>
