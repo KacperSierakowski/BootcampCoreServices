@@ -34,9 +34,6 @@ namespace BootcampCoreServices
             else
             {
                 ((MainWindow)Application.Current.MainWindow).ChosenClientTextBlock.Text = ClientIdComboBox.Text.ToString();
-                ((MainWindow)Application.Current.MainWindow).ChosenClientTextBlock.Visibility = Visibility.Visible;
-                ((MainWindow)Application.Current.MainWindow).HeaderChosenClientTextBlock.Visibility = Visibility.Visible;
-
                 this.Close();
             }
         }
