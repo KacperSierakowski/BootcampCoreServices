@@ -388,7 +388,7 @@ namespace BootcampCoreServices
                .Select(k => new { items = k.Key.Name, howManyItems = k.Count() });
             foreach (var item in ordersGroupByNames)
             {
-                RaportTextBlock.Text = RaportTextBlock.Text + "Zamówień: " + item.howManyItems + " na produkt: " + item.items + ", " + " " + Environment.NewLine;
+                RaportTextBlock.Text = RaportTextBlock.Text + "Jest: " + item.howManyItems + " (ilość) zamówień na produkt: " + item.items + ", " + " " + Environment.NewLine;
             }
         }
         //j.Ilość zamówień pogrupowanych po nazwie dla klienta o wskazanym identyfikatorze 
@@ -411,7 +411,7 @@ namespace BootcampCoreServices
                 .Select(k => new { items = k.Key.Name, howManyItems = k.Count() });
                 foreach (var item in ordersByClientIdGroupByNames)
                 {
-                    RaportTextBlock.Text = RaportTextBlock.Text + "Zamówień: " + item.howManyItems + " na produkt: " + item.items + ", " + " " + Environment.NewLine;
+                    RaportTextBlock.Text = RaportTextBlock.Text + "Jest: " + item.howManyItems + " (ilość) zamówień na produkt: " + item.items + ", " + " " + Environment.NewLine;
                 }
             }
         }
