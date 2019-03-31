@@ -1,0 +1,30 @@
+[
+ {
+   "clientId": 1,
+   "requestId": 1,
+   "name": "Bułka",
+   "quantity": 1,
+   "price": 10
+ },
+ {
+   "clientId": 123456789,
+   "requestId": 2,
+   "name": "Chleb",
+   "quantity": 2,
+   "price": 15
+ },
+ {
+   "clientId": 1,
+   "requestId": 2,
+   "name": "Chleb",
+   "quantity": 5,
+   "price": 15
+ },
+ {
+   "clientId": 2,
+   "requestId": 1,
+   "name": "Chleb",
+   "quantity": 1,
+   "price": 10
+ }
+]

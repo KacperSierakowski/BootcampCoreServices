@@ -119,6 +119,8 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="InputFiles\CsvFile.csv" />
+    <None Include="InputFiles\JsonFile.json" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -128,7 +130,9 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="InputFiles\file.xml" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\UI_upload.png" />
   </ItemGroup>

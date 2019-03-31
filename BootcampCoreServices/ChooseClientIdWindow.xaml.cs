@@ -14,9 +14,6 @@ using System.Windows.Shapes;
 
 namespace BootcampCoreServices
 {
-    /// <summary>
-    /// Interaction logic for ChooseClientIdWindow.xaml
-    /// </summary>
     public partial class ChooseClientIdWindow : Window
     {
         private OrderDB db = new OrderDB();
@@ -24,7 +21,6 @@ namespace BootcampCoreServices
         {
             InitializeComponent();
         }
-
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             if (ClientIdComboBox.Text == "")

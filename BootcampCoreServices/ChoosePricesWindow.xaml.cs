@@ -14,16 +14,12 @@ using System.Windows.Shapes;
 
 namespace BootcampCoreServices
 {
-    /// <summary>
-    /// Interaction logic for ChoosePricesWindow.xaml
-    /// </summary>
     public partial class ChoosePricesWindow : Window
     {
         public ChoosePricesWindow()
         {
             InitializeComponent();
         }
-
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             if (UpperLimitTextBox.Text == "")
@@ -45,7 +41,6 @@ namespace BootcampCoreServices
                 this.Close();
             }
         }
-
         private void LowerLimitTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (System.Text.RegularExpressions.Regex.IsMatch(LowerLimitTextBox.Text, "[^0-9]"))
@@ -54,7 +49,6 @@ namespace BootcampCoreServices
                 LowerLimitTextBox.Text = LowerLimitTextBox.Text.Remove(LowerLimitTextBox.Text.Length - 1);
             }
         }
-
         private void UpperLimitTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (System.Text.RegularExpressions.Regex.IsMatch(UpperLimitTextBox.Text, "[^0-9]"))

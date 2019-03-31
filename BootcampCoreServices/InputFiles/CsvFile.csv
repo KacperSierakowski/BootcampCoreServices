@@ -1,0 +1,5 @@
+clientId,requestId,name,quantity,price
+1,1,Bułka,1,10.25
+1,2,Chleb,2,15.00
+1,2,Chleb,5,15.00
+223456789,a,Chleb,1,10.00

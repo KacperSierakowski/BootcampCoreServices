@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BootcampCoreServices"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" Background="Black">
+        Title="BootcampCoreServices" Height="450" Width="800" Background="Black">
     <Grid>
 
         <!-- Raport section -->

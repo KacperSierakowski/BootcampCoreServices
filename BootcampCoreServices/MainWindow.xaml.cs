@@ -1,37 +1,18 @@
-﻿using CsvHelper;
-using Microsoft.VisualBasic.FileIO;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Xml;
-using System.Xml.Linq;
 using System.Xml.Serialization;
 
 namespace BootcampCoreServices
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         private OrderDB db = new OrderDB();
-        String[] fileName;
         public MainWindow()
         {
             InitializeComponent();
@@ -46,7 +27,7 @@ namespace BootcampCoreServices
         {
             try
             {
-                fileName = (String[])e.Data.GetData(DataFormats.FileDrop, true);
+                String[] fileName = (String[])e.Data.GetData(DataFormats.FileDrop, true);
                 if (fileName.Length > 0)
                 {
                     String filePath = fileName[0].ToString();
@@ -89,7 +70,6 @@ namespace BootcampCoreServices
             try
             {
                 WhatExtension = System.IO.Path.GetExtension(FilePath);
-
                 if (WhatExtension != String.Empty)
                 {
                     if (WhatExtension == ".csv")
@@ -120,16 +100,9 @@ namespace BootcampCoreServices
                 List<Request> myDeserializedObjList = (List<Request>)JsonConvert.DeserializeObject(json, typeof(List<Request>));
                 foreach (var item in myDeserializedObjList)
                 {
-                    try
-                    {
-                        db.Orders.Add(new Request { ClientId = item.ClientId, Name = item.Name, Price = item.Price, Quantity = item.Quantity, RequestId = item.RequestId });
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Nieprawidłowe dane: " + "ClientId: " + item.ClientId.ToString() + ", Name: " + item.Name.ToString() + ", Price: " + item.Price.ToString() + ", Quantity: " + item.Quantity.ToString() + ", RequestId: " + item.RequestId.ToString() + ". Błąd: " + ex.Message.ToString());
-                    }
+                    Request request = new Request { ClientId = item.ClientId, Name = item.Name, Price = item.Price, Quantity = item.Quantity, RequestId = item.RequestId };
+                    AddRequestToDatabase(request);
                 }
-                db.SaveChanges();
             }
         }
         public void LoadXML(string FilePath)
@@ -141,16 +114,9 @@ namespace BootcampCoreServices
                 Requests data = (Requests)serializer.Deserialize(streamReader);
                 foreach (var item in data.requests)
                 {
-                    try
-                    {
-                        db.Orders.Add(new Request { ClientId = item.ClientId, Name = item.Name, Price = item.Price, Quantity = item.Quantity, RequestId = item.RequestId });
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Nieprawidłowe dane: " + "ClientId: " + item.ClientId.ToString() + ", Name: " + item.Name.ToString() + ", Price: " + item.Price.ToString() + ", Quantity: " + item.Quantity.ToString() + ", RequestId: " + item.RequestId.ToString() + ". Błąd: " + ex.Message.ToString());
-                    }
+                    Request request = new Request { ClientId = item.ClientId, Name = item.Name, Price = item.Price, Quantity = item.Quantity, RequestId = item.RequestId };
+                    AddRequestToDatabase(request);
                 }
-                db.SaveChanges();
             }
         }
         public void LoadCSV(string FilePath)
@@ -176,21 +142,35 @@ namespace BootcampCoreServices
             }
             foreach (DataRow item in dataTable.Rows)
             {
-                var clientId = item.ItemArray[0].ToString();
-                var requestId = System.Convert.ToInt64(item.ItemArray[1]);
-                var name = item.ItemArray[2].ToString();
-                var quantity = System.Convert.ToInt32(item.ItemArray[3]);
-                var price = Double.Parse(item.ItemArray[4].ToString(), CultureInfo.InvariantCulture);
                 try
                 {
-                    db.Orders.Add(new Request { ClientId = clientId, RequestId = requestId, Name = name, Quantity = quantity, Price = price });
+                    var clientId = item.ItemArray[0].ToString();
+                    var requestId = System.Convert.ToInt64(item.ItemArray[1]);
+                    var name = item.ItemArray[2].ToString();
+                    var quantity = System.Convert.ToInt32(item.ItemArray[3]);
+                    var price = Double.Parse(item.ItemArray[4].ToString(), CultureInfo.InvariantCulture);
+                    Request request = new Request { ClientId = clientId, Name = name, Price = price, Quantity = quantity, RequestId = requestId };
+                    AddRequestToDatabase(request);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Nieprawidłowe dane: " + "ClientId: " + clientId.ToString() + ", Name: " + name.ToString() + ", Price: " + price.ToString() + ", Quantity: " + quantity.ToString() + ", RequestId: " + requestId.ToString() + ". Błąd: " + ex.Message.ToString());
+                    MessageBox.Show("Nieprawidłowe dane!" + ex.Message.ToString());
                 }
             }
             db.SaveChanges();
+        }
+        public void AddRequestToDatabase(Request request)
+        {
+            db.Orders.Add(request);
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                db.Orders.Remove(request);
+                MessageBox.Show("Nieprawidłowe dane: " + "ClientId: " + request.ClientId.ToString() + ", Name: " + request.Name.ToString() + ", Price: " + request.Price.ToString() + ", Quantity: " + request.Quantity.ToString() + ", RequestId: " + request.RequestId.ToString() + ". Błąd: " + ex.Message.ToString());
+            }
         }
         //a.Ilość zamówień
         private void AmountOfOrders_Button_Click(object sender, RoutedEventArgs e)
@@ -431,7 +411,7 @@ namespace BootcampCoreServices
                 .Select(k => new { items = k.Key.Name, howManyItems = k.Count() });
                 foreach (var item in ordersByClientIdGroupByNames)
                 {
-                    RaportTextBlock.Text = RaportTextBlock.Text+ "Zamówień: " + item.howManyItems + " na produkt: " + item.items + ", "  + " " + Environment.NewLine;
+                    RaportTextBlock.Text = RaportTextBlock.Text + "Zamówień: " + item.howManyItems + " na produkt: " + item.items + ", " + " " + Environment.NewLine;
                 }
             }
         }
